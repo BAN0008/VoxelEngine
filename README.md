@@ -8,6 +8,7 @@ It should be fairly simple to port to other operating systems though
 - meson
 - A C++ compiler supporting C++17
 - glfw 3.x headers and shared library
+- glm 9.8 headers (older may work)
 
 ## Runtime requirements
 - OpenGL 4.4 or higher

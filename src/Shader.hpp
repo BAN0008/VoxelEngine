@@ -8,6 +8,8 @@ public:
 	~Shader();
 
 	void Bind();
+
+	void SetUniformInt(const char* name, int value);
 private:
 	unsigned int m_program_id;
 };

@@ -48,3 +48,8 @@ void Shader::Bind()
 {
 	GL::UseProgram(m_program_id);
 }
+
+void Shader::SetUniformInt(const char* name, int value)
+{
+	GL::ProgramUniform1i(m_program_id, GL::GetUniformLocation(m_program_id, name), value);
+}

@@ -41,13 +41,15 @@ Renderer::Renderer(int p_width, int p_height)
 	LOAD_GL_FUNC(GetShaderInfoLog);
 	LOAD_GL_FUNC(DeleteShader);
 	LOAD_GL_FUNC(CreateProgram);
+	LOAD_GL_FUNC(DeleteProgram);
 	LOAD_GL_FUNC(AttachShader);
 	LOAD_GL_FUNC(DetachShader);
 	LOAD_GL_FUNC(LinkProgram);
 	LOAD_GL_FUNC(GetProgramiv);
 	LOAD_GL_FUNC(GetProgramInfoLog);
 	LOAD_GL_FUNC(UseProgram);
-	LOAD_GL_FUNC(DeleteProgram);
+	LOAD_GL_FUNC(GetUniformLocation);
+	LOAD_GL_FUNC(ProgramUniform1i);
 	LOAD_GL_FUNC(CreateVertexArrays);
 	LOAD_GL_FUNC(DeleteVertexArrays);
 	LOAD_GL_FUNC(BindVertexArray);
@@ -59,7 +61,12 @@ Renderer::Renderer(int p_width, int p_height)
 	LOAD_GL_FUNC(VertexArrayAttribBinding);
 	LOAD_GL_FUNC(VertexArrayAttribFormat);
 	LOAD_GL_FUNC(DrawArrays);
-	
+	LOAD_GL_FUNC(CreateTextures);
+	LOAD_GL_FUNC(DeleteTextures);
+	LOAD_GL_FUNC(TextureStorage3D);
+	LOAD_GL_FUNC(TextureSubImage3D);
+	LOAD_GL_FUNC(TextureParameteri);
+	LOAD_GL_FUNC(BindTextureUnit);
 
 	glfwSetWindowSizeCallback(m_window, WindowSizeCallback);
 }
