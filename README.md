@@ -1,7 +1,7 @@
 # VoxelEngine
-Engine for voxel games
-I don't really know where this project will go yet
-**Only linux is supported for now**
+Engine for voxel games\
+I don't really know where this project will go yet\
+**Only linux is supported for now**\
 It should be fairly simple to port to other operating systems though
 
 ## Build requirements
