@@ -8,7 +8,7 @@ void WindowSizeCallback(GLFWwindow* p_window, int p_width, int p_height)
 	reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(p_window))->OnResize(p_width, p_height);
 }
 
-Renderer::Renderer(int p_width, int p_height)
+Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_height}
 {
 	const char* error_description;
 
@@ -16,7 +16,7 @@ Renderer::Renderer(int p_width, int p_height)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	
-	m_window = glfwCreateWindow(p_width, p_height, "VoxelEngine", nullptr, nullptr);
+	m_window = glfwCreateWindow(m_width, m_height, "VoxelEngine", nullptr, nullptr);
 	if (!m_window) {
 		glfwGetError(&error_description);
 		std::cerr << "Renderer::Renderer: Failed to create window (" << error_description << ")\n";
@@ -48,14 +48,15 @@ Renderer::Renderer(int p_width, int p_height)
 	LOAD_GL_FUNC(GetProgramiv);
 	LOAD_GL_FUNC(GetProgramInfoLog);
 	LOAD_GL_FUNC(UseProgram);
-	LOAD_GL_FUNC(GetUniformLocation);
 	LOAD_GL_FUNC(ProgramUniform1i);
+	LOAD_GL_FUNC(ProgramUniformMatrix4fv);
 	LOAD_GL_FUNC(CreateVertexArrays);
 	LOAD_GL_FUNC(DeleteVertexArrays);
 	LOAD_GL_FUNC(BindVertexArray);
 	LOAD_GL_FUNC(CreateBuffers);
 	LOAD_GL_FUNC(DeleteBuffers);
 	LOAD_GL_FUNC(NamedBufferData);
+	LOAD_GL_FUNC(NamedBufferSubData);
 	LOAD_GL_FUNC(VertexArrayVertexBuffer);
 	LOAD_GL_FUNC(EnableVertexArrayAttrib);
 	LOAD_GL_FUNC(VertexArrayAttribBinding);
@@ -68,6 +69,7 @@ Renderer::Renderer(int p_width, int p_height)
 	LOAD_GL_FUNC(TextureParameteri);
 	LOAD_GL_FUNC(BindTextureUnit);
 
+	OnResize(m_width, m_height);
 	glfwSetWindowSizeCallback(m_window, WindowSizeCallback);
 }
 
@@ -78,5 +80,7 @@ Renderer::~Renderer()
 
 void Renderer::OnResize(int p_width, int p_height)
 {
-	GL::Viewport(0, 0, p_width, p_height);
+	m_width  = p_width;
+	m_height = p_height;
+	GL::Viewport(0, 0, m_width, m_height);
 }

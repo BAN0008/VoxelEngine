@@ -8,8 +8,10 @@ TextureArray::TextureArray(const char* p_file_name, int p_width, int p_height)
 {
 	GL::CreateTextures(GL_TEXTURE_2D_ARRAY, 1, &m_texture_array);
 
-	GL::TextureParameteri(m_texture_array, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	GL::TextureParameteri(m_texture_array, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// GL::TextureParameteri(m_texture_array, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// GL::TextureParameteri(m_texture_array, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	GL::TextureParameteri(m_texture_array, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	GL::TextureParameteri(m_texture_array, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	int image_width, image_height, image_channels;
 	stbi_uc* image_data = stbi_load(p_file_name, &image_width, &image_height, &image_channels, 0);

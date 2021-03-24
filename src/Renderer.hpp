@@ -10,4 +10,6 @@ public:
 	void OnResize(int p_width, int p_height);
 
 	GLFWwindow* m_window;
+	int         m_width;
+	int         m_height;
 };

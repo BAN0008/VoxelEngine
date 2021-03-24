@@ -1,6 +1,7 @@
 #include "Shader.hpp"
 #include "GL.hpp"
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const char* p_vertex_shader_code, const char* p_fragment_shader_code)
 {
@@ -49,7 +50,12 @@ void Shader::Bind()
 	GL::UseProgram(m_program_id);
 }
 
-void Shader::SetUniformInt(const char* name, int value)
+void Shader::SetUniformInt(int p_location, int p_value)
 {
-	GL::ProgramUniform1i(m_program_id, GL::GetUniformLocation(m_program_id, name), value);
+	GL::ProgramUniform1i(m_program_id, p_location, p_value);
+}
+
+void Shader::SetUniformMat4(int p_location, const glm::mat4& p_value)
+{
+	GL::ProgramUniformMatrix4fv(m_program_id, p_location, 1, GL_FALSE, glm::value_ptr(p_value));
 }

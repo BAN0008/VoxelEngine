@@ -19,14 +19,15 @@ namespace GL
 	inline void(*GetProgramiv)(GLuint program, GLenum pname, GLint* params);
 	inline void(*GetProgramInfoLog)(GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 	inline void(*UseProgram)(GLuint program);
-	inline GLint(*GetUniformLocation)(GLuint program, const GLchar* name);
 	inline void(*ProgramUniform1i)(GLuint program, GLint location, GLint v0);
+	inline void(*ProgramUniformMatrix4fv)(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 	inline void(*CreateVertexArrays)(GLsizei n, GLuint* arrays);
 	inline void(*DeleteVertexArrays)(GLsizei n, const GLuint* arrays);
 	inline void(*BindVertexArray)(GLuint array);
 	inline void(*CreateBuffers)(GLsizei n, GLuint* buffers);
 	inline void(*DeleteBuffers)(GLsizei n, const GLuint* buffers);
-	inline void(*NamedBufferData)(GLenum target, GLsizeiptr, const void* data, GLenum usage);
+	inline void(*NamedBufferData)(GLuint buffer, GLsizeiptr size, const void* data, GLenum usage);
+	inline void(*NamedBufferSubData)(GLuint buffer, GLintptr offset, GLsizeiptr size, const void* data);
 	inline void(*VertexArrayVertexBuffer)(GLuint vaobj, GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride);
 	inline void(*EnableVertexArrayAttrib)(GLuint vaobj, GLuint index);
 	inline void(*VertexArrayAttribBinding)(GLuint vaobj, GLuint attribindex, GLuint bindingindex);

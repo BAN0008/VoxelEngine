@@ -7,13 +7,13 @@ It should be fairly simple to port to other operating systems though
 ## Build requirements
 - meson
 - A C++ compiler supporting C++17
-- glfw 3.x headers and shared library
+- glfw 3.3 or higher headers and shared library
 - glm 9.8 headers (older may work)
 
 ## Runtime requirements
 - OpenGL 4.4 or higher
 - ARB_direct_state_access or OpenGL 4.5
-- glfw 3.x shared library
+- glfw 3.3 or higher shared library
 
 ## Building
 ```

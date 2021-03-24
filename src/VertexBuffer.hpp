@@ -12,9 +12,13 @@ public:
 	VertexBuffer(const VertexBuffer&) = delete;
 	~VertexBuffer();
 
+	void UpdateVertices(const void* p_data, unsigned int p_vertex_count);
+
 	void Render();
 private:
 	unsigned int m_vertex_array;
 	unsigned int m_vertex_buffer;
+	unsigned int m_vertex_size;
 	unsigned int m_vertex_count;
+	unsigned int m_vertex_count_capacity;
 };
