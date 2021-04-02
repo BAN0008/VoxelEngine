@@ -32,6 +32,9 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	}
 
 	// Load OpenGL function pointers
+	LOAD_GL_FUNC(Enable);
+	LOAD_GL_FUNC(CullFace);
+	LOAD_GL_FUNC(FrontFace);
 	LOAD_GL_FUNC(Clear);
 	LOAD_GL_FUNC(Viewport);
 	LOAD_GL_FUNC(CreateShader);
@@ -49,6 +52,7 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(GetProgramInfoLog);
 	LOAD_GL_FUNC(UseProgram);
 	LOAD_GL_FUNC(ProgramUniform1i);
+	LOAD_GL_FUNC(ProgramUniform3fv);
 	LOAD_GL_FUNC(ProgramUniformMatrix4fv);
 	LOAD_GL_FUNC(CreateVertexArrays);
 	LOAD_GL_FUNC(DeleteVertexArrays);
@@ -68,6 +72,10 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(TextureSubImage3D);
 	LOAD_GL_FUNC(TextureParameteri);
 	LOAD_GL_FUNC(BindTextureUnit);
+
+	GL::Enable(GL_CULL_FACE);
+	GL::FrontFace(GL_CW);
+	GL::CullFace(GL_BACK);
 
 	OnResize(m_width, m_height);
 	glfwSetWindowSizeCallback(m_window, WindowSizeCallback);

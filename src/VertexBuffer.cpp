@@ -69,6 +69,11 @@ void VertexBuffer::UpdateVertices(const void* p_data, unsigned int p_vertex_coun
 	}
 }
 
+void VertexBuffer::Clear()
+{
+	m_vertex_count = 0;
+}
+
 void VertexBuffer::Render()
 {
 	if (m_vertex_count > 0) {

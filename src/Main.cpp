@@ -2,7 +2,8 @@
 #include <GLFW/glfw3.h>
 #include "Renderer.hpp"
 #include "Shader.hpp"
-#include "VertexBuffer.hpp"
+// #include "VertexBuffer.hpp"
+#include "ChunkStorage.hpp"
 #include "TextureArray.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
@@ -27,11 +28,11 @@ void main() {
 	out_color = texture(u_texture_array, f_texture_coordinate);
 })";
 
-const float vertices[] = {
+/*const float vertices[] = {
 	-1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	 1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 0.0f
-};
+};*/
 
 static Camera* camera_ptr = nullptr;
 
@@ -80,13 +81,20 @@ int main(int argc, char **argv)
 			Shader shader(vertex_shader_code, fragment_shader_code);
 			shader.Bind();
 			shader.SetUniformInt(1, 0);
-			VertexBuffer vertex_buffer({Float3, Float3}, vertices, 3);
+			// VertexBuffer vertex_buffer({Float3, Float3}, vertices, 3);
 			TextureArray texture_array("../res/test.png", 32, 32);
 			texture_array.Bind(0);
 			Camera camera;
 			camera_ptr = &camera;
+			shader.SetUniformMat4(0, camera.GetMatrix(renderer));
 			glfwSetCursorPosCallback(renderer.m_window, MouseCallback);
 			glfwSetKeyCallback(renderer.m_window, KeyboardCallback);
+
+			ChunkStorage chunk_storage(8, 8, 8);
+			auto chunk_index = chunk_storage.NewChunk<true>();
+			chunk_storage.GenerateChunk(chunk_index);
+			chunk_storage.GenerateMesh(chunk_index);
+
 			while (!glfwWindowShouldClose(renderer.m_window)) {
 				glfwPollEvents();
 
@@ -99,7 +107,8 @@ int main(int argc, char **argv)
 
 				shader.SetUniformMat4(0, camera.GetMatrix(renderer));
 				GL::Clear(GL_COLOR_BUFFER_BIT);
-				vertex_buffer.Render();
+				// vertex_buffer.Render();
+				chunk_storage.Render(chunk_index);
 				glfwSwapBuffers(renderer.m_window);
 			}
 		}

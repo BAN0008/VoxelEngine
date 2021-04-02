@@ -7,6 +7,7 @@ source = [
 	'src/VertexBuffer.cpp',
 	'src/TextureArray.cpp',
 	'src/Camera.cpp',
+	'src/ChunkStorage.cpp',
 	'src/third_party/stb_image.cpp'
 ]
 

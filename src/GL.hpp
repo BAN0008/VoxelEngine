@@ -3,6 +3,9 @@
 
 namespace GL
 {
+	inline void(*Enable)(GLenum cap);
+	inline void(*CullFace)(GLenum mode);
+	inline void(*FrontFace)(GLenum mode);
 	inline void(*Clear)(GLbitfield mask);
 	inline void(*Viewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 	inline GLuint(*CreateShader)(GLenum shaderType);
@@ -20,6 +23,7 @@ namespace GL
 	inline void(*GetProgramInfoLog)(GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 	inline void(*UseProgram)(GLuint program);
 	inline void(*ProgramUniform1i)(GLuint program, GLint location, GLint v0);
+	inline void(*ProgramUniform3fv)(GLuint program, GLint location, GLsizei count, const GLfloat* value);
 	inline void(*ProgramUniformMatrix4fv)(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 	inline void(*CreateVertexArrays)(GLsizei n, GLuint* arrays);
 	inline void(*DeleteVertexArrays)(GLsizei n, const GLuint* arrays);
