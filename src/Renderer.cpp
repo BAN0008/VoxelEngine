@@ -52,6 +52,7 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(GetProgramInfoLog);
 	LOAD_GL_FUNC(UseProgram);
 	LOAD_GL_FUNC(ProgramUniform1i);
+	LOAD_GL_FUNC(ProgramUniform3f);
 	LOAD_GL_FUNC(ProgramUniform3fv);
 	LOAD_GL_FUNC(ProgramUniformMatrix4fv);
 	LOAD_GL_FUNC(CreateVertexArrays);
@@ -73,6 +74,7 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(TextureParameteri);
 	LOAD_GL_FUNC(BindTextureUnit);
 
+	GL::Enable(GL_DEPTH_TEST);
 	GL::Enable(GL_CULL_FACE);
 	GL::FrontFace(GL_CW);
 	GL::CullFace(GL_BACK);

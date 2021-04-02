@@ -23,6 +23,7 @@ namespace GL
 	inline void(*GetProgramInfoLog)(GLuint program, GLsizei maxLength, GLsizei* length, GLchar* infoLog);
 	inline void(*UseProgram)(GLuint program);
 	inline void(*ProgramUniform1i)(GLuint program, GLint location, GLint v0);
+	inline void(*ProgramUniform3f)(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
 	inline void(*ProgramUniform3fv)(GLuint program, GLint location, GLsizei count, const GLfloat* value);
 	inline void(*ProgramUniformMatrix4fv)(GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 	inline void(*CreateVertexArrays)(GLsizei n, GLuint* arrays);

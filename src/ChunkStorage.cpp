@@ -26,7 +26,7 @@ unsigned int ChunkStorage::NewChunk()
 		unsigned int index = m_chunks.size() / m_chunk_size;
 		m_chunks.resize(m_chunks.size() + m_chunk_size);
 		VertexBuffer* vertex_buffer = reinterpret_cast<VertexBuffer*>(m_chunks.data() + ((index + 1) * m_chunk_size) - sizeof(VertexBuffer));
-		new(vertex_buffer) VertexBuffer({Float3, Float3});
+		new(vertex_buffer) VertexBuffer({Float3, Byte3Norm, Float3});
 		if constexpr (empty) {
 			vertex_buffer->Clear();
 			for (unsigned long long i = index * m_chunk_size; i < (index * m_chunk_size) + (m_width * m_height * m_depth); i++) {
@@ -61,66 +61,68 @@ void ChunkStorage::GenerateChunk(unsigned int p_chunk_index)
 	SetVoxel(0, 0, 2, 1);
 }
 
+#pragma pack(1)
 struct Vertex
 {
 	template<char index> static Vertex MakeLeftFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z),     0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z),     1.0f,0.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z)+1.0f,0.0f,1.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z),     0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z),     -1,0,0,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z),     -1,0,0,1.0f,0.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,-1,0,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x),static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,-1,0,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z)+1.0f,-1,0,0,0.0f,1.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x),static_cast<float>(y),     static_cast<float>(z),     -1,0,0,0.0f,0.0f,0.0f};
 	}
 
 	template<char index> static Vertex MakeRightFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),     0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z)+1.0f,0.0f,1.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),     1.0f,0.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),     0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),     1,0,0,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z)+1.0f,1,0,0,0.0f,1.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1,0,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1,0,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),     1,0,0,1.0f,0.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),     1,0,0,0.0f,0.0f,0.0f};
 	}
 
 	template<char index> static Vertex MakeTopFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z),     0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z)+1.0f,0.0f,1.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z),     1.0f,0.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z),     0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z),     0,-1,0,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z)+1.0f,0,-1,0,0.0f,1.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z)+1.0f,0,-1,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z)+1.0f,0,-1,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),static_cast<float>(z),     0,-1,0,1.0f,0.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),static_cast<float>(z),     0,-1,0,0.0f,0.0f,0.0f};
 	}
 
 	template<char index> static Vertex MakeBottomFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),     0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),     1.0f,0.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0.0f,1.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),     0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),     0,1,0,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),     0,1,0,1.0f,0.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,1,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,1,0,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,1,0,0.0f,1.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),     0,1,0,0.0f,0.0f,0.0f};
 	}
 
 	template<char index> static Vertex MakeFrontFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z),0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),1.0f,0.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),0.0f,1.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z),0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z),0,0,-1,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z),0,0,-1,1.0f,0.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),0,0,-1,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z),0,0,-1,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z),0,0,-1,0.0f,1.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z),0,0,-1,0.0f,0.0f,0.0f};
 	}
 
 	template<char index> static Vertex MakeBackFace(unsigned int x, unsigned int y, unsigned int z) {
-		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z)+1.0f,0.0f,0.0f,0.0f};
-		if constexpr (index == 1) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0.0f,1.0f,0.0f};
-		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,1.0f,1.0f,0.0f};
-		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z)+1.0f,1.0f,0.0f,0.0f};
-		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z)+1.0f,0.0f,0.0f,0.0f};
+		if constexpr (index == 0) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z)+1.0f,0,0,1,0.0f,0.0f,0.0f};
+		if constexpr (index == 1) return Vertex{static_cast<float>(x),     static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,0,1,0.0f,1.0f,0.0f};
+		if constexpr (index == 2) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,0,1,1.0f,1.0f,0.0f};
+		if constexpr (index == 3) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y)+1.0f,static_cast<float>(z)+1.0f,0,0,1,1.0f,1.0f,0.0f};
+		if constexpr (index == 4) return Vertex{static_cast<float>(x)+1.0f,static_cast<float>(y),     static_cast<float>(z)+1.0f,0,0,1,1.0f,0.0f,0.0f};
+		if constexpr (index == 5) return Vertex{static_cast<float>(x),     static_cast<float>(y),     static_cast<float>(z)+1.0f,0,0,1,0.0f,0.0f,0.0f};
 	}
 
 	float px, py, pz; // a_position
 	char  nx, ny, nz; // a_normal
 	float tx, ty, tz; // a_texture_coordinate
 };
+#pragma pack()
 
 void ChunkStorage::GenerateMesh(unsigned int p_chunk_index)
 {

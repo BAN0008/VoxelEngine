@@ -9,10 +9,11 @@ VertexBuffer::VertexBuffer(std::initializer_list<AttribType> p_attribs, const vo
 	m_vertex_size = 0;
 	for (AttribType attrib : p_attribs) {
 		switch (attrib) {
-			case Float1: m_vertex_size += 4;  break;
-			case Float2: m_vertex_size += 8;  break;
-			case Float3: m_vertex_size += 12; break;
-			case Float4: m_vertex_size += 16; break;
+			case Float1:    m_vertex_size += 4;  break;
+			case Float2:    m_vertex_size += 8;  break;
+			case Float3:    m_vertex_size += 12; break;
+			case Float4:    m_vertex_size += 16; break;
+			case Byte3Norm: m_vertex_size += 3;  break;
 		}
 	}
 
@@ -42,6 +43,11 @@ VertexBuffer::VertexBuffer(std::initializer_list<AttribType> p_attribs, const vo
 				GL::VertexArrayAttribBinding(m_vertex_array, index, 0);
 				GL::VertexArrayAttribFormat(m_vertex_array, index, 4, GL_FLOAT, GL_FALSE, offset);
 				offset += 16;
+				break;
+			case Byte3Norm:
+				GL::VertexArrayAttribBinding(m_vertex_array, index, 0);
+				GL::VertexArrayAttribFormat(m_vertex_array, index, 3, GL_BYTE, GL_FALSE, offset);
+				offset += 3;
 				break;
 		}
 		index++;

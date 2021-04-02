@@ -2,7 +2,8 @@
 #include <initializer_list>
 
 enum AttribType {
-	Float1, Float2, Float3, Float4
+	Float1, Float2, Float3, Float4,
+	Byte3Norm
 };
 
 class VertexBuffer

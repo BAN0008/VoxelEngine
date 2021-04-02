@@ -55,6 +55,11 @@ void Shader::SetUniformInt(int p_location, int p_value)
 	GL::ProgramUniform1i(m_program_id, p_location, p_value);
 }
 
+void Shader::SetUniformVec3(int p_location, float p_x, float p_y, float p_z)
+{
+	GL::ProgramUniform3f(m_program_id, p_location, p_x, p_y, p_z);
+}
+
 void Shader::SetUniformMat4(int p_location, const glm::mat4& p_value)
 {
 	GL::ProgramUniformMatrix4fv(m_program_id, p_location, 1, GL_FALSE, glm::value_ptr(p_value));
