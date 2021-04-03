@@ -7,6 +7,7 @@ namespace GL
 	inline void(*CullFace)(GLenum mode);
 	inline void(*FrontFace)(GLenum mode);
 	inline void(*Clear)(GLbitfield mask);
+	inline void(*ClearColor)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 	inline void(*Viewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 	inline GLuint(*CreateShader)(GLenum shaderType);
 	inline void(*ShaderSource)(GLuint shader, GLsizei count, const GLchar** string, const GLint* length);

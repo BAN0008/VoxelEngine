@@ -36,6 +36,7 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(CullFace);
 	LOAD_GL_FUNC(FrontFace);
 	LOAD_GL_FUNC(Clear);
+	LOAD_GL_FUNC(ClearColor);
 	LOAD_GL_FUNC(Viewport);
 	LOAD_GL_FUNC(CreateShader);
 	LOAD_GL_FUNC(ShaderSource);

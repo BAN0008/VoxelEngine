@@ -6,7 +6,6 @@
 #include <climits>
 #include "Renderer.hpp"
 #include "Shader.hpp"
-// #include "VertexBuffer.hpp"
 #include "ChunkStorage.hpp"
 #include "TextureArray.hpp"
 #include "Camera.hpp"
@@ -143,15 +142,21 @@ int main(int argc, char **argv)
 			glfwSetCursorPosCallback(renderer.m_window, MouseCallback);
 			glfwSetKeyCallback(renderer.m_window, KeyboardCallback);
 
-			ChunkStorage chunk_storage(8, 8, 8);
+			ChunkStorage chunk_storage(32, 32, 32);
 			std::unordered_map<glm::ivec3, unsigned int> chunk_indices;
 
-			unsigned int chunk_index = chunk_indices.emplace(glm::ivec3(0, 0, 0), chunk_storage.NewChunk<true>()).first->second;
-			chunk_storage.GenerateChunk(chunk_index);
-			chunk_storage.GenerateMesh(chunk_index);
-			chunk_index = chunk_indices.emplace(glm::ivec3(1, 0, 0), chunk_storage.NewChunk<true>()).first->second;
-			chunk_storage.GenerateChunk(chunk_index);
-			chunk_storage.GenerateMesh(chunk_index);
+			for (unsigned int y = 0; y < 8; y++) {
+				for (unsigned int z = 0; z < 8; z++) {
+					for (unsigned int x = 0; x < 8; x++) {
+						unsigned int chunk_index = chunk_indices.emplace(glm::ivec3(x, y, z), chunk_storage.NewChunk<true>()).first->second;
+						chunk_storage.GenerateChunk(chunk_index, glm::ivec3(x, y, z));
+						chunk_storage.GenerateMesh(chunk_index);
+						// std::cout << "Generated " << (y * 8 * 8) + (z * 8) + x + 1 <<  '/' << 8 * 8 * 8 << '\n';
+					}
+				}
+			}
+
+			GL::ClearColor(0x00, 0x90, 0xff, 0xff);
 
 			while (!glfwWindowShouldClose(renderer.m_window)) {
 				glfwPollEvents();
@@ -166,8 +171,7 @@ int main(int argc, char **argv)
 				shader.SetUniformMat4(0, camera.GetMatrix(renderer));
 				GL::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				for (auto [chunk_pos, chunk_index] : chunk_indices) {
-					// TODO: Set chunk transform uniform
-					shader.SetUniformMat4(1, glm::translate(glm::mat4(1.0f), {chunk_pos * glm::ivec3(8, 8, 8)}));
+					shader.SetUniformMat4(1, glm::translate(glm::mat4(1.0f), {chunk_pos * glm::ivec3(32, 32, 32)}));
 					chunk_storage.Render(chunk_index);
 				}
 				glfwSwapBuffers(renderer.m_window);

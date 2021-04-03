@@ -1,5 +1,5 @@
 #include "ChunkStorage.hpp"
-#include "VertexBuffer.hpp"
+#include <glm/gtc/noise.hpp>
 #include <new>
 
 ChunkStorage::ChunkStorage(unsigned int p_width, unsigned int p_height, unsigned int p_depth) : m_width{p_width}, m_height{p_height}, m_depth{p_depth}
@@ -14,35 +14,12 @@ ChunkStorage::~ChunkStorage()
 	}
 }
 
-template <bool empty>
-unsigned int ChunkStorage::NewChunk()
-{
-	if (!m_free_chunks.empty()) {
-		unsigned int index = m_free_chunks.front();
-		m_free_chunks.pop();
-		return index;
-	}
-	else {
-		unsigned int index = m_chunks.size() / m_chunk_size;
-		m_chunks.resize(m_chunks.size() + m_chunk_size);
-		VertexBuffer* vertex_buffer = reinterpret_cast<VertexBuffer*>(m_chunks.data() + ((index + 1) * m_chunk_size) - sizeof(VertexBuffer));
-		new(vertex_buffer) VertexBuffer({Float3, Byte3Norm, Float3});
-		if constexpr (empty) {
-			vertex_buffer->Clear();
-			for (unsigned long long i = index * m_chunk_size; i < (index * m_chunk_size) + (m_width * m_height * m_depth); i++) {
-				m_chunks[i] = 0;
-			}
-		}
-		return index;
-	}
-}
-
 void ChunkStorage::DeleteChunk(unsigned int p_chunk_index)
 {
 	m_free_chunks.push(p_chunk_index);
 }
 
-void ChunkStorage::GenerateChunk(unsigned int p_chunk_index)
+void ChunkStorage::GenerateChunk(unsigned int p_chunk_index, glm::ivec3 chunk_pos)
 {
 	unsigned char* voxels = m_chunks.data() + (p_chunk_index * m_chunk_size);
 
@@ -50,7 +27,17 @@ void ChunkStorage::GenerateChunk(unsigned int p_chunk_index)
 		voxels[(y * m_width * m_depth) + (z * m_width) + x] = voxel;
 	};
 
-	SetVoxel(0, 0, 0, 1);
+	for (unsigned int y = 0; y < m_height; y++) {
+		for (unsigned int z = 0; z < m_depth; z++) {
+			for (unsigned int x = 0; x < m_width; x++) {
+				// SetVoxel(x, y, z, glm::simplex(glm::vec3(static_cast<float>(x) / 512.0f, static_cast<float>(y) / 512.0f, static_cast<float>(z) / 512.0f)) > 0.5f);
+				// SetVoxel(x, y, z, glm::simplex(glm::vec3(static_cast<float>(x) / 12.0f, static_cast<float>(y) / 12.0f, static_cast<float>(z) / 12.0f)) > 0.5f);
+				SetVoxel(x, y, z, glm::simplex(glm::vec3(static_cast<float>((chunk_pos.x * m_width) + x) / 16.0f, static_cast<float>((chunk_pos.y * m_height) + y) / 16.0f, static_cast<float>((chunk_pos.z * m_depth) + z) / 16.0f)) > 0.2f);
+			}
+		}
+	}
+
+	/*SetVoxel(0, 0, 0, 1);
 	SetVoxel(1, 0, 0, 1);
 	SetVoxel(2, 0, 0, 1);
 	SetVoxel(3, 0, 0, 1);
@@ -58,7 +45,7 @@ void ChunkStorage::GenerateChunk(unsigned int p_chunk_index)
 	SetVoxel(0, 1, 0, 1);
 	SetVoxel(0, 2, 0, 1);
 	SetVoxel(0, 0, 1, 1);
-	SetVoxel(0, 0, 2, 1);
+	SetVoxel(0, 0, 2, 1);*/
 }
 
 #pragma pack(1)
@@ -203,6 +190,3 @@ void ChunkStorage::Render(unsigned int p_chunk_index)
 {
 	reinterpret_cast<VertexBuffer*>(m_chunks.data() + ((p_chunk_index + 1) * m_chunk_size) - sizeof(VertexBuffer))->Render();
 }
-
-void _newchunk1() { ChunkStorage storage(0, 0, 0); storage.NewChunk<false>(); };
-void _newchunk2() { ChunkStorage storage(0, 0, 0); storage.NewChunk<true>();  };
