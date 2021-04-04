@@ -41,8 +41,18 @@ namespace GL
 	inline void(*DrawArrays)(GLenum mode, GLint first, GLsizei count);
 	inline void(*CreateTextures)(GLenum target, GLsizei n, GLuint* textures);
 	inline void(*DeleteTextures)(GLsizei n, const GLuint* textures);
+	inline void(*TextureStorage2D)(GLuint texture, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height);
 	inline void(*TextureStorage3D)(GLuint texture, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth);
 	inline void(*TextureSubImage3D)(GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void* pixels);
 	inline void(*TextureParameteri)(GLuint texture, GLenum pname, GLint param);
 	inline void(*BindTextureUnit)(GLuint unit, GLuint texture);
+	inline void(*CreateFramebuffers)(GLsizei n, GLuint* framebuffers);
+	inline void(*DeleteFramebuffers)(GLsizei n, GLuint* framebuffers);
+	inline void(*BindFramebuffer)(GLenum target, GLuint framebuffer);
+	inline void(*NamedFramebufferParameteri)(GLuint framebuffer, GLenum pname, GLint param);
+	inline void(*NamedFramebufferTexture)(GLuint framebuffer, GLenum attachment, GLuint texture, GLint level);
+	inline void(*NamedFramebufferRenderbuffer)(GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
+	inline void(*CreateRenderbuffers)(GLsizei n, GLuint* renderbuffers);
+	inline void(*DeleteRenderbuffers)(GLsizei n, GLuint* renderbuffers);
+	inline void(*NamedRenderbufferStorage)(GLuint renderbuffer, GLenum internalformat, GLsizei width, GLsizei height);
 }

@@ -5,7 +5,10 @@ source = [
 	'src/Renderer.cpp',
 	'src/Shader.cpp',
 	'src/VertexBuffer.cpp',
+	'src/Texture.cpp',
 	'src/TextureArray.cpp',
+	'src/Framebuffer.cpp',
+	'src/Renderbuffer.cpp',
 	'src/Camera.cpp',
 	'src/ChunkStorage.cpp',
 	'src/third_party/stb_image.cpp'

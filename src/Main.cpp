@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 			Shader shader(vertex_shader_code, fragment_shader_code);
 			shader.Bind();
 			shader.SetUniformInt(2, 0);
-			shader.SetUniformVec3(3, -10, 10, -10);
+			shader.SetUniformVec3(3, -500, 500, -500);
 			TextureArray texture_array("../res/test.png", 32, 32);
 			texture_array.Bind(0);
 			Camera camera;

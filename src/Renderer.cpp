@@ -70,10 +70,20 @@ Renderer::Renderer(int p_width, int p_height) : m_width{p_width}, m_height{p_hei
 	LOAD_GL_FUNC(DrawArrays);
 	LOAD_GL_FUNC(CreateTextures);
 	LOAD_GL_FUNC(DeleteTextures);
+	LOAD_GL_FUNC(TextureStorage2D);
 	LOAD_GL_FUNC(TextureStorage3D);
 	LOAD_GL_FUNC(TextureSubImage3D);
 	LOAD_GL_FUNC(TextureParameteri);
 	LOAD_GL_FUNC(BindTextureUnit);
+	LOAD_GL_FUNC(CreateFramebuffers);
+	LOAD_GL_FUNC(DeleteFramebuffers);
+	LOAD_GL_FUNC(BindFramebuffer);
+	LOAD_GL_FUNC(NamedFramebufferParameteri);
+	LOAD_GL_FUNC(NamedFramebufferTexture);
+	LOAD_GL_FUNC(NamedFramebufferRenderbuffer);
+	LOAD_GL_FUNC(CreateRenderbuffers);
+	LOAD_GL_FUNC(DeleteRenderbuffers);
+	LOAD_GL_FUNC(NamedRenderbufferStorage);
 
 	GL::Enable(GL_DEPTH_TEST);
 	GL::Enable(GL_CULL_FACE);
